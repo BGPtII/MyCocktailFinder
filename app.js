@@ -33,6 +33,7 @@ listType.onchange = function() {
                     currentSelectionList.append(newIngredientListItem);
                 }
             });
+            //TEST
         // currentSelectionListSubHeader.innerText = "Non-Alcoholic Cocktails";
         // currentSelectionList.append(currentSelectionListSubHeader);
         // fetch("http://thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic")
