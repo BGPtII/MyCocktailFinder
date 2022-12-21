@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>Cocktail Information</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Look up cocktail information">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div id="title">
+        <h1>TheCocktailDB Visualization Tool</h1>
+        <a src="TheCocktailDB">TheCocktailDB</a>
+    </div>
+
+    <div>
+        <form name="list-type" id="list-type-form">
+            <input type="radio" id="ingredient" name="list-type" value="ingredient">
+            <label for="ingredient">Ingredient</label>
+            <input type="radio" id="cocktail" name="list-type" value="cocktail">
+            <label for="cocktail">Cocktail</label>
+        </form>
+    </div>
+
+    <div>
+        <h1 id="current-selection-header"></h1>
+        <ul id="current-selection-list">
+
+        </ul>
+    </div>
+</body>
+
+</html>
