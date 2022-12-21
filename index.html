@@ -14,24 +14,29 @@
 <body>
     <div id="title">
         <h1>TheCocktailDB Visualization Tool</h1>
-        <a src="TheCocktailDB">TheCocktailDB</a>
+        <a href="https://www.thecocktaildb.com/">TheCocktailDB</a>
     </div>
 
-    <div>
-        <form name="list-type" id="list-type-form">
-            <input type="radio" id="ingredient" name="list-type" value="ingredient">
-            <label for="ingredient">Ingredient</label>
-            <input type="radio" id="cocktail" name="list-type" value="cocktail">
-            <label for="cocktail">Cocktail</label>
-        </form>
+    <div id="info-boxes-vert">
+        <div id="list-options">
+                <form name="list-type" id="list-type-form">
+                    <input type="radio" id="ingredient" name="list-type" value="ingredient">
+                    <label for="ingredient">Ingredient</label>
+                    <input type="radio" id="cocktail" name="list-type" value="cocktail">
+                    <label for="cocktail">Cocktail</label>
+                </form>
+        
+                <h1 id="current-selection-header"></h1>
+                <ul id="current-selection-list">
+        
+                </ul>
+        </div>
+        <div id="specific-details">
+            <h1></h1>
+        </div>
+
     </div>
 
-    <div>
-        <h1 id="current-selection-header"></h1>
-        <ul id="current-selection-list">
-
-        </ul>
-    </div>
 </body>
 
 </html>

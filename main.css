@@ -1,0 +1,19 @@
+#title {
+    border-bottom: solid black;
+}
+#list-type-form {
+    padding-top: 3rem;
+}
+
+#info-boxes-vert {
+    display: flex;
+    flex-direction: row;
+}
+#list-options {
+    border-right: solid black;
+    height: 100vh;
+    width: 20vw;
+}
+#list-options ul {
+    padding: 2rem;
+}

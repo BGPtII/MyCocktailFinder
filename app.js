@@ -6,6 +6,7 @@ listType.onchange = function() {
     currentSelectionList.innerHTML = "";
     let currentListType = document.querySelector("input[name='list-type']:checked").value;
 
+    // Handle list of ingredients
     if (currentListType === "ingredient") {
         currentSelectionHeader.innerText = "List of Ingredients";
         fetch("http://thecocktaildb.com/api/json/v1/1/list.php?i=list")
@@ -18,36 +19,35 @@ listType.onchange = function() {
                 }
             });
     }
+
+    // Handle list of cocktails
     else if (currentListType === "cocktail") {
         currentSelectionHeader.innerText = "List of Cocktails";
-        let currentSelectionListSubHeader = document.createElement("h2");
-        currentSelectionListSubHeader.innerText = "Alcoholic Cocktails";
-        currentSelectionList.append(currentSelectionListSubHeader);
+        // TO DO list alcoholic
         fetch("http://thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic")
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 for (let i = 0; i < data.drinks.length; i++) {
                     let newIngredientListItem = document.createElement("li");
                     newIngredientListItem.innerText = data.drinks[i].strDrink;
                     currentSelectionList.append(newIngredientListItem);
                 }
             });
-            //TEST
-        // currentSelectionListSubHeader.innerText = "Non-Alcoholic Cocktails";
-        // currentSelectionList.append(currentSelectionListSubHeader);
-        // fetch("http://thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic")
-        // .then((response) => response.json())
-        // .then((data) => {
-        //     console.log(data);
-        //     for (let i = 0; i < data.drinks.length; i++) {
-        //         let newIngredientListItem = document.createElement("li");
-        //         newIngredientListItem.innerText = data.drinks[i].strDrink;
-        //         currentSelectionList.append(newIngredientListItem);
-        //     }
-        // });
+        
+        //TO DO list non-alcoholic
+        fetch("http://thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic")
+        .then((response) => response.json())
+        .then((data) => {
+            for (let i = 0; i < data.drinks.length; i++) {
+                let newIngredientListItem = document.createElement("li");
+                newIngredientListItem.innerText = data.drinks[i].strDrink;
+                currentSelectionList.append(newIngredientListItem);
+            }
+        });
+    
+    // Nothing is selected
     }
     else {
-        console.log("nothing selected or available");
+        currentSelectionHeader.innerText = "Nothing selected or available"
     }
 }
