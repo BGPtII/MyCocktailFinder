@@ -1,9 +1,9 @@
-let listType = document.getElementById("list-type-form");
+let listTypeForm = document.getElementById("list-type-form");
 let currentSelectionHeader = document.getElementById("current-selection-header");
 let selectionDetailsContainer = document.getElementById("selection-details-container");
-selectionDetailsContainer.style.width = "fit-content";
+let selectedItemContainer = document.getElementById("selected-item-container");
 
-listType.onchange = function() {
+listTypeForm.onchange = function() {
     selectionDetailsContainer.innerHTML = "";
     let currentListType = document.querySelector("input[name='list-type']:checked").value;
 
@@ -14,14 +14,40 @@ listType.onchange = function() {
         fetch("http://thecocktaildb.com/api/json/v1/1/list.php?i=list")
             .then((response) => response.json())
             .then((data) => {
+                // Display list of ingredients
                 for (let i = 0; i < data.drinks.length; i++) {
                     let ingredientListItem = document.createElement("li");
                     ingredientListItem.innerText = data.drinks[i].strIngredient1;
+                    ingredientListItem.style.width = "fit-content";
+                    // Handle ingredient information
+                    ingredientListItem.addEventListener("mouseover", (event) => {
+                        ingredientListItem.style.textDecoration = "underline";
+                        ingredientListItem.style.cursor = "pointer";
+                    });
+                    ingredientListItem.addEventListener("mouseout", (event) => {
+                        ingredientListItem.style.textDecoration = "none";
+                        ingredientListItem.style.cursor = "none";
+                    });
+                    ingredientListItem.addEventListener("click", (event) => {
+                        selectedItemContainer.innerHTML = "";
+                        fetch("http://thecocktaildb.com/api/json/v1/1/search.php?i=" + ingredientListItem.innerText)
+                            .then((response) => response.json())
+                            .then((data) => {
+                                let selectedItemHeader = document.createElement("h2");
+                                selectedItemHeader.innerText = ingredientListItem.innerText;
+                                selectedItemContainer.append(selectedItemHeader);
+                                let selectedItemDescription = document.createElement("p");
+                                selectedItemDescription.innerText = data.ingredients[0].strDescription;
+                                selectedItemContainer.append(selectedItemDescription);
+                        });
+                    });
                     ingredientList.append(ingredientListItem);
                 }
         });
         selectionDetailsContainer.append(ingredientList);
+        selectionDetailsContainer.style.borderRight = "3px solid black";
     }
+
     // Handle list of cocktails
     else if (currentListType === "cocktail") {
         currentSelectionHeader.innerText = "List of Cocktails";
@@ -56,10 +82,5 @@ listType.onchange = function() {
             }
         });
         selectionDetailsContainer.append(nonAlcoholicCocktailList);
-    
-    // Nothing is selected
-    }
-    else {
-        currentSelectionHeader.innerText = "Select an option"
     }
 }

@@ -12,21 +12,24 @@
 </head>
 
 <body>
-    <div id="title">
+    <div id="title-bar">
         <h1>TheCocktailDB Visualization Tool</h1>
         <a href="https://www.thecocktaildb.com/">TheCocktailDB</a>
-    </div>
-    <div id="info-boxes-vertical">
         <form name="list-type" id="list-type-form">
             <input type="radio" id="ingredient" name="list-type" value="ingredient">
             <label for="ingredient">Ingredient</label>
             <input type="radio" id="cocktail" name="list-type" value="cocktail">
             <label for="cocktail">Cocktail</label>
         </form>
+    </div>
+
+    <div id="selection-box">
         <div id="selection-details-container">
             <h1 id="current-selection-header"></h1>
         </div>
+        <div id="selected-item-container">
 
+        </div>
     </div>
 
 </body>

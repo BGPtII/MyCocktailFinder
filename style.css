@@ -4,3 +4,13 @@
 a:visited {
     color: black;
 }
+#selection-box {
+    display: flex;
+    flex-direction: row;
+}
+#selection-details-container {
+    padding-right: 3rem;
+}
+#title-bar {
+    border-bottom: 3px solid black;
+}
