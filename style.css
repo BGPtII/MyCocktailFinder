@@ -1,16 +1,90 @@
-#title {
-    border-bottom: 1px solid black;
+body {
+    margin: 0;
+    background-color: hwb(214 8% 13%);
+    color: white;
+    font-family: "Playfair", serif;
+    font-optical-sizing: auto;
+    font-weight: 0;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
 }
-a:visited {
+#titlebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+#titlebar h1 {
+    margin-bottom: 0;
+}
+#titlebar h3 {
+    margin: 0;
+}
+#titlebar h3 a {
+    color: inherit;
+    text-decoration: underline;
+}
+#titlebar h3 a:visited {
+    color: inherit;
+}
+#specification {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#random-button-option, select, input {
+    font: inherit;
     color: black;
+    background-color: white;
+    border: solid black;
 }
-#selection-box {
+#specification-option-choice, #random-button-option, #filter-cocktail-option, #cocktail-search-option {
+    margin: 1rem;
+}
+#specification-option-choice, #random-button-option, #filter-cocktail-option, #cocktail-search-option {
+    display: none;
+}
+#filter-cocktail-option {
+    margin-bottom: 1rem;
+}
+#filter-category-selection, #filter-options-selection {
+    margin-bottom: 0.5rem;
+}
+#random-button-option:hover {
+    cursor: pointer;
+}
+#result-cocktail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#result-info-and-pic {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
-#selection-details-container {
-    padding-right: 3rem;
+#result-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 0.5rem;
 }
-#title-bar {
-    border-bottom: 3px solid black;
+#result-picture {
+    max-height: 13rem;
+    width: auto;
+}
+@media (max-width: 500px) {
+    #result-info-and-pic {
+        flex-direction: column;
+    }
+    #result-info {
+        padding-right: 0;
+    }
+}
+#error-message {
+    color: black;
+    background-color: red;
+    border: solid black;
+    display: none;
 }

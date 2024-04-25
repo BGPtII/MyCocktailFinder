@@ -1,37 +1,79 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
-<head>
-    <title>Cocktail Information</title>
-    <meta charset="UTF-8">
-    <meta name="description" content="Look up cocktail information">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="app.js" defer></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-
+<meta charset="UTF-8">
+<title>MyCocktailFinder</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap" rel="stylesheet">
 <body>
-    <div id="title-bar">
-        <h1>TheCocktailDB Visualization Tool</h1>
-        <a href="https://www.thecocktaildb.com/">TheCocktailDB</a>
-        <form name="list-type" id="list-type-form">
-            <input type="radio" id="ingredient" name="list-type" value="ingredient">
-            <label for="ingredient">Ingredient</label>
-            <input type="radio" id="cocktail" name="list-type" value="cocktail">
-            <label for="cocktail">Cocktail</label>
-        </form>
-    </div>
 
-    <div id="selection-box">
-        <div id="selection-details-container">
-            <h1 id="current-selection-header"></h1>
+<div id="titlebar">
+    <h1>MyCocktailFinder</h1>
+    <h3>Powered by: <a href="https://www.thecocktaildb.com/">TheCocktailDB</a></h3>
+</div>
+<div id="specification">
+    <div id="specification-option-choice">
+        <div>
+            <input type="radio" id="random-cocktail" name="cocktail-option" value="random-cocktail">
+            <label for="random-cocktail">Display random cocktail</label>
         </div>
-        <div id="selected-item-container">
-
+        <div>
+            <input type="radio" id="filter-cocktail" name="cocktail-option" value="filter-cocktail">
+            <label for="filter-cocktail">Filter and choose a cocktail</label>
+        </div>
+        <div>
+            <input type="radio" id="search-cocktail" name="cocktail-option" value="search-cocktail">
+            <label for="search-cocktail">Search for a cocktail</label>
         </div>
     </div>
+    <button id="random-button-option" type="button">Recommend me a random cocktail!</button>
+    <div id="filter-cocktail-option">
+        <div id="filter-category-selection">
+            <label for="filter-category">Filter cocktail by:</label>
+            <select name="filter-category" id="filter-category">
+                <option value="" disabled selected>Select a category</option>
+                <option value="i">Ingredient</option>
+                <option value="a">Alcoholic</option>
+                <option value="c">Category</option>
+                <option value="g">Glass</option>
+            </select>
+        </div>
+        <div id="filter-options-selection">
+            <label for="filter-options">Select an option:</label>
+            <select name="filter-options" id="filter-options">
+                <option value="" disabled selected>Select an option</option>
+            </select>
+        </div>
+        <div id="cocktail-options-selection">
+            <label for="cocktail-options">Select a cocktail:</label>
+            <select name="cocktail-options" id="cocktail-options">
+                <option value="" disabled selected>Select a cocktail</option>
+            </select>
+        </div>
+    </div>
+    <input type="text" id="cocktail-search-option" placeholder="Search for a cocktail here" maxlength="30">
+</div>
+<div id="results">
+    <div id="result-cocktail">
+        <div id="result-info-and-pic">
+            <div id="result-info">
+                <h2 id="rc-name"></h2>
+                <p id="rc-alcoholic"></p>
+                <p id="rc-category"></p>
+                <p id="rc-glass"></p>
+            </div>
+            <img id="result-picture">
+        </div>
+        <div id="result-instructions-ingredients">
+            <ul id="rc-ingredients"></ul>
+            <ol id="rc-instructions"></ol>
+        </div>
+    </div>
+    <h2 id="error-message">Unable to grab from TheCocktailDB, try again later</h2>
+</div>
 
+<script src="app.js"></script>
 </body>
-
 </html>
