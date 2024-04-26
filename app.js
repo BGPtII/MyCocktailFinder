@@ -1,3 +1,8 @@
+function displayError() {
+    clearResults();
+    document.getElementById('error-message').style.display = 'block';
+}
+
 async function fetchData(url, typeSelected) {
     try {
         const response = await fetch(url);
@@ -38,12 +43,7 @@ function clearResults() {
     document.getElementById('rc-ingredients').innerHTML = '';
     document.getElementById('rc-instructions').innerHTML = '';
     document.getElementById('result-picture').src = '';
-    document.getElementById('error-message').innerText = '';
-}
-
-function displayError() {
-    clearResults();
-    document.getElementById('error-message').innerText = 'Unable to grab from TheCocktailDB, try again later';
+    document.getElementById('error-message').style.display = 'none';
 }
 
 async function preloadImage(imageURL) {
@@ -69,11 +69,9 @@ async function preloadAndSetImage(imageURL, targetElementId) {
 }
 
 async function displayResults(cocktail) {
-    const imageURL = cocktail.strDrinkThumb;
-    const targetElementId = 'result-picture';
-
+    const resultPictureIMG = 'result-picture';
     try {
-        await preloadAndSetImage(imageURL, targetElementId);
+        await preloadAndSetImage(cocktail.strDrinkThumb, resultPictureIMG);
 
         const nameH2 = document.getElementById('rc-name');
         const alcoholicP = document.getElementById('rc-alcoholic');
@@ -124,102 +122,128 @@ async function displayResults(cocktail) {
     }
 }
 
-async function handleFunctionality() {
-    const randomCocktail = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/random.php', 'cocktailDetails');
-    if (randomCocktail) {
-        const specificationOptionChoiceDiv = document.getElementById('specification-option-choice');
-        specificationOptionChoiceDiv.style.display = 'block';
-
-        const randomButtonOption = document.getElementById('random-button-option');
-
-        const filterCocktailOptionDiv = document.getElementById('filter-cocktail-option');
-        const filterCategorySelect = document.getElementById('filter-category');
-        let filterCategoryURLPart = null;
-        const filterOptionsSelect = document.getElementById('filter-options');
-        let filterOptionURLPart = null;
-        const cocktailOptionsSelect = document.getElementById('cocktail-options');
-
-        const cocktailSearchOption = document.getElementById('cocktail-search-option');
-
-        randomButtonOption.addEventListener('click', async function () {
-            const randomCocktail = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/random.php', 'cocktailDetails');
-            displayResults(randomCocktail);
-        });
-
-        filterCategorySelect.addEventListener('change', async (event) => {
-            while (filterOptionsSelect.childElementCount > 1) {
-                filterOptionsSelect.removeChild(filterOptionsSelect.lastChild);
-            }
-            filterOptionsSelect.selectedIndex = 0;
-            while (cocktailOptionsSelect.childElementCount > 1) {
-                cocktailOptionsSelect.removeChild(cocktailOptionsSelect.lastChild);
-            }
-            cocktailOptionsSelect.selectedIndex = 0;
-
-            filterCategoryURLPart = event.target.value;
-            const filterOptions = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/list.php?${filterCategoryURLPart}=list`, 'filterOptions');
-            filterOptions.forEach((option) => {
-                const optionLI = document.createElement('option');
-                optionLI.innerText = option;
-                filterOptionsSelect.append(optionLI);
-            });
-        });
-        filterOptionsSelect.addEventListener('change', async (event) => {
-            while (cocktailOptionsSelect.childElementCount > 1) {
-                cocktailOptionsSelect.removeChild(cocktailOptionsSelect.lastChild);
-            }
-            cocktailOptionsSelect.selectedIndex = 0;
-
-            filterOptionURLPart = event.target.value.replace(/ /g, "_");
-            const cocktailOptions = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?${filterCategoryURLPart}=${filterOptionURLPart}`, 'cocktailOptions');
-            cocktailOptions.forEach((option) => {
-                const optionLI = document.createElement('option');
-                optionLI.innerText = option;
-                cocktailOptionsSelect.append(optionLI);
-            });
-        });
-        cocktailOptionsSelect.addEventListener('change', async (event) => {
-            const selectedCocktailURLPart = event.target.value.replace(/ /g, "_");
-            const selectedCocktailInfo = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${selectedCocktailURLPart}`, 'cocktailDetails');
-            clearResults();
-            displayResults(selectedCocktailInfo);
-        });
-
-        cocktailSearchOption.addEventListener('input', async (event) => {
-            const cocktailSearchURLPart = event.target.value.trim().replace(/ +/g, '_');
-            const cocktailSearchInfo = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${cocktailSearchURLPart}`, 'cocktailDetails');
-            clearResults();
-            if (cocktailSearchInfo) {
-                displayResults(cocktailSearchInfo);
-            }
-        });
+function displayAppropriateFunctionality(selection) {
+    const randomButtonOption = document.getElementById('random-button-option');
+    const filterCocktailOptionDiv = document.getElementById('filter-cocktail-option');
+    const cocktailSearchOption = document.getElementById('cocktail-search-option');
     
-        specificationOptionChoiceDiv.addEventListener('change', (event) => {
-            const specificationOptionChoice = event.target.value;
-            clearResults();
-            switch (specificationOptionChoice) {
-                case 'random-cocktail':
-                    randomButtonOption.style.display = 'block';
-                    filterCocktailOptionDiv.style.display = 'none';
-                    cocktailSearchOption.style.display = 'none';
-                    break;
-                case 'filter-cocktail':
-                    randomButtonOption.style.display = 'none';
-                    filterCocktailOptionDiv.style.display = 'block';
-                    cocktailSearchOption.style.display = 'none';
-                    break;
-                case 'search-cocktail':
-                    randomButtonOption.style.display = 'none';
-                    filterCocktailOptionDiv.style.display = 'none';
-                    cocktailSearchOption.style.display = 'block';
-                    break;
-            }
-        });
-    } 
-    else {
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.style.display = 'flex';
+    randomButtonOption.style.display = (selection === 'random') ? 'block' : 'none';
+    filterCocktailOptionDiv.style.display = (selection === 'filter') ? 'block' : 'none';
+    cocktailSearchOption.style.display = (selection === 'search') ? 'block' : 'none';
+}
+
+async function randomButtonOptionClickHandler() {
+    const randomCocktail = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/random.php', 'cocktailDetails');
+    displayResults(randomCocktail);
+}
+
+function handleRandomFunctionality() {
+    document.getElementById('cocktail-search-option').value = '';
+    document.getElementById('filter-categories').removeEventListener('change', filterCategorySelectHandler);
+    document.getElementById('filter-options').removeEventListener('change', filterOptionSelectHandler);
+    document.getElementById('cocktail-options').removeEventListener('change', filterCocktailOptionSelectHandler);
+    document.getElementById('cocktail-search-option').removeEventListener('input', handleSearchInputChange);
+    
+    displayAppropriateFunctionality('random');
+    document.getElementById('random-button-option').addEventListener('click', randomButtonOptionClickHandler);
+}
+
+async function filterCategorySelectHandler(event) {
+    const filterOptionsSelect = document.getElementById('filter-options');
+    const cocktailOptionsSelect = document.getElementById('cocktail-options');
+
+    clearResults();
+    while (filterOptionsSelect.childElementCount > 1) {
+        filterOptionsSelect.removeChild(filterOptionsSelect.lastChild);
     }
+    filterOptionsSelect.selectedIndex = 0;
+    while (cocktailOptionsSelect.childElementCount > 1) {
+        cocktailOptionsSelect.removeChild(cocktailOptionsSelect.lastChild);
+    }
+    cocktailOptionsSelect.selectedIndex = 0;
+
+    const filterCategoryURLPart = event.target.value;
+    const filterOptions = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/list.php?${filterCategoryURLPart}=list`, 'filterOptions');
+    filterOptions.forEach((option) => {
+        const optionLI = document.createElement('option');
+        optionLI.innerText = option;
+        filterOptionsSelect.append(optionLI);
+    });
+}
+
+async function filterOptionSelectHandler(event) {
+    const cocktailOptionsSelect = document.getElementById('cocktail-options');
+
+    clearResults();
+    while (cocktailOptionsSelect.childElementCount > 1) {
+        cocktailOptionsSelect.removeChild(cocktailOptionsSelect.lastChild);
+    }
+    cocktailOptionsSelect.selectedIndex = 0;
+
+    const filterCategoryURLPart = document.getElementById('filter-categories').value;
+    const filterOptionURLPart = event.target.value.replace(/ /g, "_");
+    const cocktailOptions = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?${filterCategoryURLPart}=${filterOptionURLPart}`, 'cocktailOptions');
+    cocktailOptions.forEach((option) => {
+        const optionLI = document.createElement('option');
+        optionLI.innerText = option;
+        cocktailOptionsSelect.append(optionLI);
+    });
+}
+
+async function filterCocktailOptionSelectHandler(event) {
+    const selectedCocktailURLPart = event.target.value.replace(/ /g, "_");
+
+    const selectedCocktailInfo = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${selectedCocktailURLPart}`, 'cocktailDetails');
+    clearResults();
+    displayResults(selectedCocktailInfo);
+}
+
+function handleFilterFunctionality() {
+    displayAppropriateFunctionality('filter');
+    document.getElementById('random-button-option').removeEventListener('click', randomButtonOptionClickHandler);
+    document.getElementById('filter-categories').removeEventListener('change', filterCategorySelectHandler);
+    document.getElementById('filter-options').removeEventListener('change', filterOptionSelectHandler);
+    document.getElementById('cocktail-options').removeEventListener('change', filterCocktailOptionSelectHandler);
+    document.getElementById('cocktail-search-option').removeEventListener('input', handleSearchInputChange);
+
+    document.getElementById('filter-categories').addEventListener('change', filterCategorySelectHandler);
+    document.getElementById('filter-options').addEventListener('change', filterOptionSelectHandler);
+    document.getElementById('cocktail-options').addEventListener('change', filterCocktailOptionSelectHandler);
+}
+
+async function handleSearchInputChange(event) {
+    const cocktailSearchURLPart = event.target.value.trim().replace(/ +/g, '_');
+    const cocktailSearchInfo = await fetchData(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${cocktailSearchURLPart}`, 'cocktailDetails');
+    clearResults();
+    if (cocktailSearchInfo) {
+        displayResults(cocktailSearchInfo);
+    }
+}
+
+function handleSearchFunctionality() {
+    displayAppropriateFunctionality('search');
+    document.getElementById('random-button-option').removeEventListener('click', randomButtonOptionClickHandler);
+    document.getElementById('cocktail-search-option').addEventListener('input', handleSearchInputChange);
+}
+
+async function handleFunctionality() {
+    const specificationOptionChoiceDiv = document.getElementById('specification-option-choice');
+
+    specificationOptionChoiceDiv.addEventListener('change', (event) => {
+        const specificationOptionChoice = event.target.value;
+        clearResults();
+        switch (specificationOptionChoice) {
+            case 'random-cocktail':
+                handleRandomFunctionality();
+                break;
+            case 'filter-cocktail':
+                handleFilterFunctionality();
+                break;
+            case 'search-cocktail':
+                handleSearchFunctionality();
+                break;
+        }
+    });
 }
 
 window.onload = handleFunctionality();

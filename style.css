@@ -41,7 +41,7 @@ body {
 #specification-option-choice, #random-button-option, #filter-cocktail-option, #cocktail-search-option {
     margin: 1rem;
 }
-#specification-option-choice, #random-button-option, #filter-cocktail-option, #cocktail-search-option {
+#random-button-option, #filter-cocktail-option, #cocktail-search-option {
     display: none;
 }
 #filter-cocktail-option {
