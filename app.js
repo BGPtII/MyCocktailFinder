@@ -122,7 +122,7 @@ async function displayResults(cocktail) {
     }
 }
 
-function displayAppropriateFunctionality(selection) {
+function setUpAppropriateFunctionality(selection) {
     const randomButtonOption = document.getElementById('random-button-option');
     const filterCocktailOptionDiv = document.getElementById('filter-cocktail-option');
     const cocktailSearchOption = document.getElementById('cocktail-search-option');
@@ -130,6 +130,25 @@ function displayAppropriateFunctionality(selection) {
     randomButtonOption.style.display = (selection === 'random') ? 'block' : 'none';
     filterCocktailOptionDiv.style.display = (selection === 'filter') ? 'block' : 'none';
     cocktailSearchOption.style.display = (selection === 'search') ? 'block' : 'none';
+
+    document.getElementById('random-button-option').removeEventListener('click', randomButtonOptionClickHandler);
+    document.getElementById('filter-categories').removeEventListener('change', filterCategorySelectHandler);
+    document.getElementById('filter-options').removeEventListener('change', filterOptionSelectHandler);
+    document.getElementById('cocktail-options').removeEventListener('change', filterCocktailOptionSelectHandler);
+    document.getElementById('cocktail-search-option').removeEventListener('input', handleSearchInputChange);
+    switch (selection) {
+        case 'random':
+            document.getElementById('random-button-option').addEventListener('click', randomButtonOptionClickHandler);
+            break;
+        case 'filter':
+            document.getElementById('filter-categories').addEventListener('change', filterCategorySelectHandler);
+            document.getElementById('filter-options').addEventListener('change', filterOptionSelectHandler);
+            document.getElementById('cocktail-options').addEventListener('change', filterCocktailOptionSelectHandler);
+            break;
+        case 'search':
+            document.getElementById('cocktail-search-option').addEventListener('input', handleSearchInputChange);
+            break;
+    }
 }
 
 async function randomButtonOptionClickHandler() {
@@ -139,13 +158,7 @@ async function randomButtonOptionClickHandler() {
 
 function handleRandomFunctionality() {
     document.getElementById('cocktail-search-option').value = '';
-    document.getElementById('filter-categories').removeEventListener('change', filterCategorySelectHandler);
-    document.getElementById('filter-options').removeEventListener('change', filterOptionSelectHandler);
-    document.getElementById('cocktail-options').removeEventListener('change', filterCocktailOptionSelectHandler);
-    document.getElementById('cocktail-search-option').removeEventListener('input', handleSearchInputChange);
-    
-    displayAppropriateFunctionality('random');
-    document.getElementById('random-button-option').addEventListener('click', randomButtonOptionClickHandler);
+    setUpAppropriateFunctionality('random');
 }
 
 async function filterCategorySelectHandler(event) {
@@ -199,16 +212,7 @@ async function filterCocktailOptionSelectHandler(event) {
 }
 
 function handleFilterFunctionality() {
-    displayAppropriateFunctionality('filter');
-    document.getElementById('random-button-option').removeEventListener('click', randomButtonOptionClickHandler);
-    document.getElementById('filter-categories').removeEventListener('change', filterCategorySelectHandler);
-    document.getElementById('filter-options').removeEventListener('change', filterOptionSelectHandler);
-    document.getElementById('cocktail-options').removeEventListener('change', filterCocktailOptionSelectHandler);
-    document.getElementById('cocktail-search-option').removeEventListener('input', handleSearchInputChange);
-
-    document.getElementById('filter-categories').addEventListener('change', filterCategorySelectHandler);
-    document.getElementById('filter-options').addEventListener('change', filterOptionSelectHandler);
-    document.getElementById('cocktail-options').addEventListener('change', filterCocktailOptionSelectHandler);
+    setUpAppropriateFunctionality('filter');
 }
 
 async function handleSearchInputChange(event) {
@@ -221,9 +225,7 @@ async function handleSearchInputChange(event) {
 }
 
 function handleSearchFunctionality() {
-    displayAppropriateFunctionality('search');
-    document.getElementById('random-button-option').removeEventListener('click', randomButtonOptionClickHandler);
-    document.getElementById('cocktail-search-option').addEventListener('input', handleSearchInputChange);
+    setUpAppropriateFunctionality('search');
 }
 
 async function handleFunctionality() {
