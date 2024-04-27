@@ -1,3 +1,14 @@
+function clearResults() {
+    document.getElementById('rc-name').textContent = '';
+    document.getElementById('rc-alcoholic').textContent = '';
+    document.getElementById('rc-category').textContent = '';
+    document.getElementById('rc-glass').textContent = '';
+    document.getElementById('rc-ingredients').innerHTML = '';
+    document.getElementById('rc-instructions').innerHTML = '';
+    document.getElementById('result-picture').src = '';
+    document.getElementById('error-message').style.display = 'none';
+}
+
 function displayError() {
     clearResults();
     document.getElementById('error-message').style.display = 'block';
@@ -33,17 +44,6 @@ async function fetchData(url, typeSelected) {
     catch (error) {
         displayError();
     }
-}
-
-function clearResults() {
-    document.getElementById('rc-name').textContent = '';
-    document.getElementById('rc-alcoholic').textContent = '';
-    document.getElementById('rc-category').textContent = '';
-    document.getElementById('rc-glass').textContent = '';
-    document.getElementById('rc-ingredients').innerHTML = '';
-    document.getElementById('rc-instructions').innerHTML = '';
-    document.getElementById('result-picture').src = '';
-    document.getElementById('error-message').style.display = 'none';
 }
 
 async function preloadImage(imageURL) {
@@ -103,9 +103,11 @@ async function displayResults(cocktail) {
         for (let i = 0; i < measures.length; i++) {
             const measure = measures[i];
             const ingredient = ingredients[i];
-            const listItem = document.createElement('li');
-            listItem.textContent = `${measure || ''}: ${ingredient || ''}`.trim();
-            ingredientsFragment.appendChild(listItem);
+            if (measure && ingredient) {
+                const listItem = document.createElement('li');
+                listItem.textContent = (measure.trim() === '') ? `${ingredient}`.trim() : `${measure}: ${ingredient}`.trim();
+                ingredientsFragment.appendChild(listItem);
+            }
         }
         ingredientsUL.appendChild(ingredientsFragment);
 
